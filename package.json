@@ -1,0 +1,26 @@
+{
+  "name": "mishradp3",
+  "version": "1.0.0",
+  "description": "Server Programming Project 3",
+  "main": "server.js",
+  "scripts": {
+    "test": "none",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "MishraDP3"
+  },
+  "keywords": [
+    "express",
+    "rest",
+    "momentjs",
+    "morgan"
+  ],
+  "author": "Dishant Mishra",
+  "license": "ISC",
+  "dependencies": {
+    "companydata": "file:companydata",
+    "express": "^4.16.4"
+  }
+}

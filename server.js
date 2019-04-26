@@ -9,21 +9,35 @@ const port = 8080;
 
 const root = '/CompanyServices';
 
-app.get(`${root}/company`, (req, res) => {
-    try {
-        let company = req.query.company;
-        datalayer.deleteCompany(company) ?
-            res.send({
-                success: `${company} was deleted.`
-            }) :
-            res.send({
-                error: `${company} wasn't found.`
-            });
-    } catch (err) {
-        res.send({
-            error: err
-        });
-    }
+/**
+ * Deletes the company being queried.
+ */
+app.delete(`${root}/company`, (req, res) => {
+  try {
+    let company = req.query.company;
+    datalayer.deleteCompany(company)
+      ? res.json({ success: `${company} was deleted.` })
+      : res.json({ error: `${company} wasn't found.` });
+  } catch (err) {
+    res.json({
+      error: err
+    });
+  }
+});
+
+/**
+ * Gets the department based on the company name and department id.
+ */
+app.get(`${root}/department`, (req, res) => {
+  try {
+    let company = req.query.company;
+    let department = req.query.dep_id;
+    let result = datalayer.getDepartment(company, department)
+      ? res.json({ success: { result } })
+      : res.json({ error: `Dpt. ${department} not in ${company}.` });
+  } catch (err) {
+    res.json({ error: err });
+  }
 });
 
 app.listen(port, () => console.log(`MishraDP3 on ${port}!`));

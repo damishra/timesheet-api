@@ -33,8 +33,22 @@ app.get(`${root}/department`, (req, res) => {
     let company = req.query.company;
     let department = req.query.dep_id;
     let result = datalayer.getDepartment(company, department)
-      ? res.json({ success: { result } })
+      ? res.json({ success: result })
       : res.json({ error: `Dpt. ${department} not in ${company}.` });
+  } catch (err) {
+    res.json({ error: err });
+  }
+});
+
+/**
+ * Gets all the department in the specified company
+ */
+app.get(`${root}/departments`, (res, req) => {
+  try {
+    let company = req.query.company;
+    let result = datalayer.getAllDepartment(company)
+      ? res.json(result)
+      : res.json({ error: `No dpt. found in ${company}` });
   } catch (err) {
     res.json({ error: err });
   }

@@ -7,6 +7,11 @@ const express = require('express');
 const app = express();
 const port = 8080;
 
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 const root = '/CompanyServices';
 
 /**
@@ -14,7 +19,7 @@ const root = '/CompanyServices';
  */
 app.delete(`${root}/company`, (req, res) => {
   try {
-    let company = req.query.company;
+    const company = req.query.company;
     datalayer.deleteCompany(company)
       ? res.json({ success: `${company} was deleted.` })
       : res.json({ error: `${company} wasn't found.` });
@@ -30,8 +35,8 @@ app.delete(`${root}/company`, (req, res) => {
  */
 app.get(`${root}/department`, (req, res) => {
   try {
-    let company = req.query.company;
-    let department = req.query.dep_id;
+    const company = req.query.company,
+      department = req.query.dept_id;
     let result = datalayer.getDepartment(company, department)
       ? res.json({ success: result })
       : res.json({ error: `Dpt. ${department} not in ${company}.` });
@@ -43,12 +48,54 @@ app.get(`${root}/department`, (req, res) => {
 /**
  * Gets all the department in the specified company
  */
-app.get(`${root}/departments`, (res, req) => {
+app.get(`${root}/departments`, (req, res) => {
   try {
-    let company = req.query.company;
-    let result = datalayer.getAllDepartment(company)
-      ? res.json(result)
+    const company = req.query.company;
+    console.log(company);
+    datalayer.getAllDepartment(company)
+      ? res.json(datalayer.getAllDepartment(company))
       : res.json({ error: `No dpt. found in ${company}` });
+  } catch (err) {
+    res.json({ error: err });
+  }
+});
+
+/**
+ * Updates the department based on new info.
+ */
+app.put(`${root}/department`, (req, res) => {
+  try {
+    const company = req.body.company,
+      id = req.body.dept_id,
+      name = req.body.dept_name,
+      num = company + req.body.dept_no,
+      loc = req.body.location,
+      dept = datalayer.getDepartmentByNo(company, num);
+
+    dept.dept_name = name;
+    dept.location = loc;
+
+    datalayer.updateDepartment(dept)
+      ? res.json({ success: datalayer.getDepartmentByNo(company, num) })
+      : res.json({ error: `Dept. ${id} doesn't exist in ${company}.` });
+  } catch (err) {
+    res.json({ error: err });
+  }
+});
+
+/**
+ * Adds new department to your company
+ */
+app.post(`${root}/department`, (req, res) => {
+  try {
+    const company = req.body.company,
+      name = req.body.dept_name,
+      num = company + req.body.dept_no,
+      loc = req.body.location,
+      dept = new Department(company, name, num, loc);
+    datalayer.insertDepartment(dept)
+      ? res.json({ success: datalayer.getDepartmentByNo(company, num) })
+      : res.json({ error: `Dept. ${id} not created in ${company}.` });
   } catch (err) {
     res.json({ error: err });
   }

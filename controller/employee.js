@@ -32,12 +32,7 @@ module.exports = {
   update: (id, name, num, hire, job, sal, dept, mng) => {
     try {
       let result;
-      if (
-        !(
-          moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') <
-          moment(Date.now()).format('YYYY-MM-DD')
-        )
-      ) {
+      if (moment(hire, 'YYYY-MM-DD') <= moment()) {
         const emp = datalayer.getEmployee(id);
 
         if (datalayer.getDepartment(dept)) {
@@ -70,17 +65,10 @@ module.exports = {
   insert: (name, num, hire, job, sal, dept, mng) => {
     let result;
     try {
-      if (
-        !(
-          moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') <
-          moment(Date.now()).format('YYYY-MM-DD')
-        )
-      ) {
+      if (moment(hire, 'YYYY-MM-DD') <= moment()) {
         if (datalayer.getDepartment(dept)) {
           num = `dxm2269-e-${num}`;
-          hire =
-            moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
-            moment().format('YYYY-MM-DD');
+          hire = moment(hire, 'YYYY-MM-DD') || moment();
           const emp = new Employee(
             name,
             num,

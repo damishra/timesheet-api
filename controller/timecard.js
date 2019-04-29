@@ -33,18 +33,10 @@ module.exports = {
     try {
       let result;
       if (
-        !(
-          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
-          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
-        ) ||
-        !(
-          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
-          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
-        ) ||
-        !(
-          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
-          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
-        )
+        moment(start, 'YYYY-MM-DD HH:mm:ss') <= moment(Date.now()) ||
+        moment(end, 'YYYY-MM-DD HH:mm:ss') <= moment(Date.now()) ||
+        moment(end, 'YYYY-MM-DD HH:mm:ss') >=
+          moment(start, 'YYYY-MM-DD HH:mm:ss')
       ) {
         const tc = datalayer.getTimecard(id);
 
@@ -73,18 +65,10 @@ module.exports = {
     try {
       let result;
       if (
-        !(
-          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
-          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
-        ) ||
-        !(
-          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
-          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
-        ) ||
-        !(
-          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
-          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
-        )
+        moment(start, 'YYYY-MM-DD HH:mm:ss') <= moment() ||
+        moment(end, 'YYYY-MM-DD HH:mm:ss') <= moment() ||
+        moment(end, 'YYYY-MM-DD HH:mm:ss') >=
+          moment(start, 'YYYY-MM-DD HH:mm:ss')
       ) {
         if (datalayer.getEmployee(emp)) {
           start =

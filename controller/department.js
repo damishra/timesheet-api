@@ -5,6 +5,9 @@ const datalayer = require('../companydata');
 const Department = require('../companydata').Department;
 
 module.exports = {
+  /**
+   * Get one department
+   */
   one: (company, department) => {
     try {
       let result;
@@ -16,6 +19,9 @@ module.exports = {
       return { error: err };
     }
   },
+  /**
+   * Get all the departments under company
+   */
   all: company => {
     try {
       let result;
@@ -27,6 +33,9 @@ module.exports = {
       return { error: err };
     }
   },
+  /**
+   * Update existing department
+   */
   update: (id, company, name, num, loc) => {
     try {
       let result;
@@ -44,6 +53,9 @@ module.exports = {
       return { error: err };
     }
   },
+  /**
+   * Insert new department under company
+   */
   insert: (company, name, num, loc) => {
     try {
       let result;
@@ -57,6 +69,9 @@ module.exports = {
       return { error: err };
     }
   },
+  /**
+   * Delete existing department
+   */
   delete: (company, id) => {
     try {
       let result;

@@ -17,7 +17,7 @@
 3. Install node dependencies :
 
 ```
-    npm install && npm install companydata --save
+    npm install
 ```
 
 4. Run the server :

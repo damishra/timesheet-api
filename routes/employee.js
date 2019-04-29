@@ -12,29 +12,33 @@ router.get('/employees', (req, res) => res.json(emp.all(req.query.company)));
 
 router.put('/employee', (req, res) =>
   res.json(
-    dept.update(
+    emp.update(
+      req.body.emp_id,
+      req.body.emp_name,
+      req.body.hire_date,
+      req.body.job,
+      req.body.salary,
       req.body.dept_id,
-      req.body.company,
-      req.body.dept_name,
-      req.body.dept_no,
-      req.body.location
+      req.body.mng_id
     )
   )
 );
 
 router.post('/employee', (req, res) =>
   res.json(
-    dept.insert(
-      req.body.company,
-      req.body.dept_name,
-      req.body.dept_no,
-      req.body.location
+    emp.insert(
+      req.body.emp_name,
+      req.body.hire_date,
+      req.body.job,
+      req.body.salary,
+      req.body.dept_id,
+      req.body.mng_id
     )
   )
 );
 
 router.delete('/employee', (req, res) =>
-  res.json(dept.delete(req.query.company, req.query.dept_id))
+  res.json(emp.delete(req.query.emp_id))
 );
 
 module.exports = router;

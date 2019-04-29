@@ -32,19 +32,38 @@ module.exports = {
   update: (id, start, end) => {
     try {
       let result;
-      const tc = datalayer.getTimecard(id);
+      if (
+        !(
+          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
+          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+        ) ||
+        !(
+          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
+          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+        ) ||
+        !(
+          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
+          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        )
+      ) {
+        const tc = datalayer.getTimecard(id);
 
-      tc.start_time =
-        moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-        tc.start_time ||
-        moment().format('YYYY-MM-DD HH:mm:ss');
-      tc.end_time =
-        moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-        tc.end_time ||
-        moment().format('YYYY-MM-DD HH:mm:ss');
-      datalayer.updateTimecard(tc)
-        ? (result = { success: datalayer.getTimecard(id) })
-        : (result = { error: `Timecard ${id} doesn't exist.` });
+        tc.start_time =
+          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+          tc.start_time ||
+          moment().format('YYYY-MM-DD HH:mm:ss');
+        tc.end_time =
+          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+          tc.end_time ||
+          moment().format('YYYY-MM-DD HH:mm:ss');
+        datalayer.updateTimecard(tc)
+          ? (result = { success: datalayer.getTimecard(id) })
+          : (result = { error: `Timecard ${id} doesn't exist.` });
+      } else {
+        result = {
+          error: 'Invalid time provided.'
+        };
+      }
       return result;
     } catch (err) {
       return { error: err };
@@ -53,20 +72,40 @@ module.exports = {
   insert: (start, end, emp) => {
     try {
       let result;
-      if (datalayer.getEmployee(emp)) {
-        start =
-          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-          moment().format('YYYY-MM-DD HH:mm:ss');
-        end =
-          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-          moment().format('YYYY-MM-DD HH:mm:ss');
-        const tc = new Timecard(start, end, emp);
-        datalayer.insertTimecard(tc)
-          ? (result = { success: tc })
-          : (result = { error: `Timecard not created.` });
+      if (
+        !(
+          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
+          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+        ) ||
+        !(
+          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
+          moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+        ) ||
+        !(
+          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') <
+          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        )
+      ) {
+        if (datalayer.getEmployee(emp)) {
+          start =
+            moment(start, 'YYYY-MM-DD HH:mm:ss').format(
+              'YYYY-MM-DD HH:mm:ss'
+            ) || moment().format('YYYY-MM-DD HH:mm:ss');
+          end =
+            moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+            moment().format('YYYY-MM-DD HH:mm:ss');
+          const tc = new Timecard(start, end, emp);
+          datalayer.insertTimecard(tc)
+            ? (result = { success: tc })
+            : (result = { error: `Timecard not created.` });
+        } else {
+          result = {
+            error: `Emp. ${emp} doesn't exist. A foreign key constraint fails.`
+          };
+        }
       } else {
         result = {
-          error: `Emp. ${emp} doesn't exist. A foreign key constraint fails.`
+          error: 'Invalid time provided.'
         };
       }
       return result;

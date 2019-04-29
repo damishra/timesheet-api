@@ -32,26 +32,35 @@ module.exports = {
   update: (id, name, num, hire, job, sal, dept, mng) => {
     try {
       let result;
-      const emp = datalayer.getEmployee(id);
+      if (
+        !(
+          moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') <
+          moment(Date.now()).format('YYYY-MM-DD')
+        )
+      ) {
+        const emp = datalayer.getEmployee(id);
 
-      if (datalayer.getDepartment(dept)) {
-        emp.emp_name = name;
-        emp.emp_num = `dxm2269-e-${num}`;
-        emp.hire_date =
-          moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
-          emp.hire_date ||
-          moment().format('YYYY-MM-DD');
-        emp.job = job;
-        emp.salary = parseFloat(sal);
-        emp.dept_id = dept;
-        emp.mng_id = mng;
-        datalayer.updateEmployee(emp)
-          ? (result = { success: datalayer.getEmployee(id) })
-          : (result = { error: `Emp. ${id} doesn't exist.` });
+        if (datalayer.getDepartment(dept)) {
+          emp.emp_name = name;
+          emp.emp_num = `dxm2269-e-${num}`;
+          emp.hire_date =
+            moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
+            emp.hire_date ||
+            moment().format('YYYY-MM-DD');
+          emp.job = job;
+          emp.salary = parseFloat(sal);
+          emp.dept_id = dept;
+          emp.mng_id = mng;
+          datalayer.updateEmployee(emp)
+            ? (result = { success: datalayer.getEmployee(id) })
+            : (result = { error: `Emp. ${id} doesn't exist.` });
+        } else {
+          result = {
+            error: `Dept. ${dept} doesn't exist. A foreign key constraint fails.`
+          };
+        }
       } else {
-        result = {
-          error: `Dept. ${dept} doesn't exist. A foreign key constraint fails.`
-        };
+        result = { error: 'Invalid hire date provided.' };
       }
       return result;
     } catch (err) {
@@ -61,28 +70,38 @@ module.exports = {
   insert: (name, num, hire, job, sal, dept, mng) => {
     let result;
     try {
-      if (datalayer.getDepartment(dept)) {
-        num = `dxm2269-e-${num}`;
-        hire =
-          moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
-          moment().format('YYYY-MM-DD');
-        const emp = new Employee(
-          name,
-          num,
-          hire,
-          job,
-          parseFloat(sal),
-          dept,
-          mng
-        );
-        datalayer.insertEmployee(emp)
-          ? (result = { success: emp })
-          : (result = { error: `Emp. ${id} not created.` });
+      if (
+        !(
+          moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') <
+          moment(Date.now()).format('YYYY-MM-DD')
+        )
+      ) {
+        if (datalayer.getDepartment(dept)) {
+          num = `dxm2269-e-${num}`;
+          hire =
+            moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
+            moment().format('YYYY-MM-DD');
+          const emp = new Employee(
+            name,
+            num,
+            hire,
+            job,
+            parseFloat(sal),
+            dept,
+            mng
+          );
+          datalayer.insertEmployee(emp)
+            ? (result = { success: emp })
+            : (result = { error: `Emp. ${id} not created.` });
+        } else {
+          result = {
+            error: `Dept. ${dept} doesn't exist. A foreign key constraint fails.`
+          };
+        }
       } else {
-        result = {
-          error: `Dept. ${dept} doesn't exist. A foreign key constraint fails.`
-        };
+        result = { error: 'Invalid hire date provided.' };
       }
+
       return result;
     } catch (err) {
       return { error: err };

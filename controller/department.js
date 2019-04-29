@@ -60,10 +60,14 @@ module.exports = {
     try {
       let result;
       num = `${company}-d-${num}`;
-      const dept = new Department(company, name, num, loc);
-      datalayer.insertDepartment(dept)
-        ? (result = { success: datalayer.getDepartmentByNo(company, num) })
-        : (result = { error: `Dept. ${id} not created in ${company}.` });
+      if (!datalayer.getDepartmentByNo(num)) {
+        const dept = new Department(company, name, num, loc);
+        datalayer.insertDepartment(dept)
+          ? (result = { success: datalayer.getDepartmentByNo(company, num) })
+          : (result = { error: `Dept. ${id} not created in ${company}.` });
+      } else {
+        result = { error: 'Department already exists.' };
+      }
       return result;
     } catch (err) {
       return { error: err };

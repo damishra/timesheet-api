@@ -53,16 +53,22 @@ module.exports = {
   insert: (start, end, emp) => {
     try {
       let result;
-      start =
-        moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-        moment().format('YYYY-MM-DD HH:mm:ss');
-      end =
-        moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-        moment().format('YYYY-MM-DD HH:mm:ss');
-      const tc = new Timecard(start, end, emp);
-      datalayer.insertTimecard(tc)
-        ? (result = { success: tc })
-        : (result = { error: `Timecard not created.` });
+      if (datalayer.getEmployee(emp)) {
+        start =
+          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+          moment().format('YYYY-MM-DD HH:mm:ss');
+        end =
+          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+          moment().format('YYYY-MM-DD HH:mm:ss');
+        const tc = new Timecard(start, end, emp);
+        datalayer.insertTimecard(tc)
+          ? (result = { success: tc })
+          : (result = { error: `Timecard not created.` });
+      } else {
+        result = {
+          error: `Emp. ${emp} doesn't exist. A foreign key constraint fails.`
+        };
+      }
       return result;
     } catch (err) {
       return { error: err };

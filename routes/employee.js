@@ -15,6 +15,7 @@ router.put('/employee', (req, res) =>
     emp.update(
       req.body.emp_id,
       req.body.emp_name,
+      req.body.emp_no,
       req.body.hire_date,
       req.body.job,
       req.body.salary,
@@ -28,6 +29,7 @@ router.post('/employee', (req, res) =>
   res.json(
     emp.insert(
       req.body.emp_name,
+      req.body.emp_no,
       req.body.hire_date,
       req.body.job,
       req.body.salary,

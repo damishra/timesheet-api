@@ -19,7 +19,7 @@ module.exports = {
   all: company => {
     try {
       let result;
-      datalayer.getAllDepartment(company)
+      datalayer.getAllDepartment(company).length
         ? (result = datalayer.getAllDepartment(company))
         : (result = { error: `No dpt. found in ${company}` });
       return result;

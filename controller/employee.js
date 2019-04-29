@@ -21,8 +21,8 @@ module.exports = {
   all: company => {
     try {
       let result;
-      datalayer.getAllEmployees(company)
-        ? (result = datalayer.getAllEmployees(company))
+      datalayer.getAllEmployee(company).length
+        ? (result = datalayer.getAllEmployee(company))
         : (result = { error: `No emp. found.` });
       return result;
     } catch (err) {
@@ -35,13 +35,13 @@ module.exports = {
       const emp = datalayer.getEmployee(id);
 
       emp.emp_name = name;
-      emp.emp_num = `${company}-e-${num}`;
+      emp.emp_num = `dxm2269-e-${num}`;
       emp.hire_date =
         moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
         emp.hire_date ||
         moment().format('YYYY-MM-DD');
       emp.job = job;
-      emp.salary = sal;
+      emp.salary = parseFloat(sal);
       emp.dept_id = dept;
       emp.mng_id = mng;
       datalayer.updateEmployee(emp)
@@ -55,11 +55,19 @@ module.exports = {
   insert: (name, num, hire, job, sal, dept, mng) => {
     try {
       let result;
-      num = `${company}-e-${num}`;
+      num = `dxm2269-e-${num}`;
       hire =
         moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
         moment().format('YYYY-MM-DD');
-      const emp = new Employee(name, num, hire, job, sal, dept, mng);
+      const emp = new Employee(
+        name,
+        num,
+        hire,
+        job,
+        parseFloat(sal),
+        dept,
+        mng
+      );
       datalayer.insertEmployee(emp)
         ? (result = { success: emp })
         : (result = { error: `Emp. ${id} not created.` });

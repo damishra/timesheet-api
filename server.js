@@ -2,9 +2,6 @@
 'use esversion:6';
 
 const datalayer = require('./companydata');
-
-console.log(datalayer);
-
 const express = require('express');
 const app = express();
 const port = 8080;

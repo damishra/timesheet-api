@@ -21,8 +21,8 @@ module.exports = {
   all: company => {
     try {
       let result;
-      datalayer.getAllDepartment(company)
-        ? (result = datalayer.getAllDepartment(company))
+      datalayer.getAllEmployees(company)
+        ? (result = datalayer.getAllEmployees(company))
         : (result = { error: `No emp. found.` });
       return result;
     } catch (err) {

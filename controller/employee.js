@@ -38,6 +38,7 @@ module.exports = {
       emp.emp_num = `${company}-e-${num}`;
       emp.hire_date =
         moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
+        emp.hire_date ||
         moment().format('YYYY-MM-DD');
       emp.job = job;
       emp.salary = sal;
@@ -60,7 +61,7 @@ module.exports = {
         moment().format('YYYY-MM-DD');
       const emp = new Employee(name, num, hire, job, sal, dept, mng);
       datalayer.insertEmployee(emp)
-        ? (result = { success: datalayer.getEmployeeByNo(num) })
+        ? (result = { success: emp })
         : (result = { error: `Emp. ${id} not created.` });
       return result;
     } catch (err) {

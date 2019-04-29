@@ -1,79 +1,30 @@
 'use strict';
 'use esversion:6';
 
-const datalayer = require('../companydata');
-const Timecard = require('../companydata').Timecard;
+const tc = require('../controller/timecard');
 
-const moment = require('moment');
+const express = require('express');
+const router = express.Router();
 
-module.exports = {
-  one: id => {
-    try {
-      let result;
-      datalayer.getTimecard(id)
-        ? (result = { success: datalayer.getTimecard(id) })
-        : (result = { error: `Timecard ${id} not found.` });
-      return result;
-    } catch (err) {
-      return { error: err };
-    }
-  },
-  all: employee => {
-    try {
-      let result;
-      datalayer.getAllTimecards(employee)
-        ? (result = datalayer.getAllTImecards(employee))
-        : (result = { error: `No timecard found.` });
-      return result;
-    } catch (err) {
-      return { error: err };
-    }
-  },
-  update: (id, start, end, emp) => {
-    try {
-      let result;
-      const tc = datalayer.getTimecard(id);
+router.get('/timecard', (req, res) => res.json(tc.one(req.query.timecard_id)));
 
-      tc.start_time = moment(start, 'YYYY-MM-DD hh:mm:ss').format(
-        'YYYY-MM-DD hh:mm:ss'
-      );
-      tc.end_time = moment(end, 'YYYY-MM-DD hh:mm:ss').format(
-        'YYYY-MM-DD hh:mm:ss'
-      );
-      tc.emp_id = emp;
-      datalayer.updateTimecard(tc)
-        ? (result = { success: datalayer.getTimecard(id) })
-        : (result = { error: `Timecard ${id} doesn't exist.` });
-      return result;
-    } catch (err) {
-      return { error: err };
-    }
-  },
-  insert: (name, num, hire, job, sal, dept, mng) => {
-    try {
-      let result;
-      num = `${company}-e-${num}`;
-      hire =
-        moment(hire, 'YYYY-MM-DD').format('YYYY-MM-DD') ||
-        moment().format('YYYY-MM-DD');
-      const emp = new Employee(name, num, hire, job, sal, dept, mng);
-      datalayer.insertEmployee(emp)
-        ? (result = { success: datalayer.getEmployeeByNo(num) })
-        : (result = { error: `Emp. ${id} not created.` });
-      return result;
-    } catch (err) {
-      return { error: err };
-    }
-  },
-  delete: id => {
-    try {
-      let result;
-      datalayer.deleteEmployee(id)
-        ? (result = { success: `Emp. ${id} has been deleted.` })
-        : (result = { error: `Emp. ${id} couldn't be deleted.` });
-      return result;
-    } catch (err) {
-      return { error: err };
-    }
-  }
-};
+router.get('/timecards', (req, res) => res.json(tc.all(req.query.emp_id)));
+
+router.put('/timecard', (req, res) =>
+  res.json(
+    tc.update(
+      req.body.timecard_id,
+      req.body.start_time,
+      req.body.end_time,
+      req.body.emp_id
+    )
+  )
+);
+
+router.post('/timecard', (req, res) =>
+  res.json(tc.insert(req.body.start_time, req.body.end_time, req.body.emp_id))
+);
+
+router.delete('/timecard', (req, res) => res.json(tc.delete(req.query.emp_id)));
+
+module.exports = router;

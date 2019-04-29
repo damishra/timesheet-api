@@ -53,7 +53,6 @@ app.get(`${root}/department`, (req, res) => {
 app.get(`${root}/departments`, (req, res) => {
   try {
     const company = req.query.company;
-    console.log(company);
     datalayer.getAllDepartment(company)
       ? res.json(datalayer.getAllDepartment(company))
       : res.json({ error: `No dpt. found in ${company}` });

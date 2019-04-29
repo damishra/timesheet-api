@@ -1,3 +1,5 @@
+'use strict';
+'use esversion:6';
 const datalayer = require('companydata');
 const Department = require('companydata').Department;
 const Employee = require('companydata').Employee;

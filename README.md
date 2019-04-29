@@ -11,7 +11,7 @@
 2. cd into repo directory :
 
 ```
-    cd MishraDP
+    cd MishraDP3
 ```
 
 3. Install node dependencies :

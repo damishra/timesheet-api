@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 const root = '/CompanyServices';
 
-routes.forEach(dept => app.use(root, dept));
+routes.forEach(req => app.use(root, req));
 
 /**
  * Deletes the company being queried.

@@ -1,16 +1,16 @@
-'use strict';
-'use esversion:6';
+"use strict";
+"use esversion:6";
 
-const emp = require('../controller/employee');
+const emp = require("../controller/employee");
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-router.get('/employee', (req, res) => res.json(emp.one(req.query.emp_id)));
+router.get("/employee", (req, res) => res.json(emp.one(req.query.emp_id)));
 
-router.get('/employees', (req, res) => res.json(emp.all(req.query.company)));
+router.get("/employees", (req, res) => res.json(emp.all(req.query.company)));
 
-router.put('/employee', (req, res) =>
+router.put("/employee", (req, res) =>
   res.json(
     emp.update(
       req.body.emp_id,
@@ -25,7 +25,7 @@ router.put('/employee', (req, res) =>
   )
 );
 
-router.post('/employee', (req, res) =>
+router.post("/employee", (req, res) =>
   res.json(
     emp.insert(
       req.body.emp_name,
@@ -39,7 +39,7 @@ router.post('/employee', (req, res) =>
   )
 );
 
-router.delete('/employee', (req, res) =>
+router.delete("/employee", (req, res) =>
   res.json(emp.delete(req.query.emp_id))
 );
 

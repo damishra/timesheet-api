@@ -1,25 +1,25 @@
-'use strict';
-'use esversion:6';
+"use strict";
+"use esversion:6";
 
-const datalayer = require('./companydata');
-const express = require('express');
+const datalayer = require("./companydata");
+const express = require("express");
 const app = express();
 const port = 8080;
 
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 const routes = [
-  require('./routes/department'),
-  require('./routes/employee'),
-  require('./routes/timecard')
+  require("./routes/department"),
+  require("./routes/employee"),
+  require("./routes/timecard"),
 ];
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const root = '/CompanyServices';
+const root = "/CompanyServices";
 
-routes.forEach(req => app.use(root, req));
+routes.forEach((req) => app.use(root, req));
 
 /**
  * Deletes the company being queried.
@@ -32,7 +32,7 @@ app.delete(`${root}/company`, (req, res) => {
       : res.json({ error: `${company} wasn't found.` });
   } catch (err) {
     res.json({
-      error: err
+      error: err,
     });
   }
 });

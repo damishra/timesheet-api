@@ -1,13 +1,13 @@
-'use strict';
-'use esversion:6';
+"use strict";
+"use esversion:6";
 
-const datalayer = require('../companydata');
-const Timecard = require('../companydata').Timecard;
+const datalayer = require("../companydata");
+const Timecard = require("../companydata").Timecard;
 
-const moment = require('moment');
+const moment = require("moment");
 
 module.exports = {
-  one: id => {
+  one: (id) => {
     try {
       let result;
       datalayer.getTimecard(id)
@@ -18,7 +18,7 @@ module.exports = {
       return { error: err };
     }
   },
-  all: employee => {
+  all: (employee) => {
     try {
       let result;
       datalayer.getAllTimecard(employee).length
@@ -33,27 +33,27 @@ module.exports = {
     try {
       let result;
       if (
-        moment(start, 'YYYY-MM-DD HH:mm:ss') <= moment(Date.now()) ||
-        moment(end, 'YYYY-MM-DD HH:mm:ss') <= moment(Date.now()) ||
-        moment(end, 'YYYY-MM-DD HH:mm:ss') >=
-          moment(start, 'YYYY-MM-DD HH:mm:ss')
+        moment(start, "YYYY-MM-DD HH:mm:ss") <= moment(Date.now()) ||
+        moment(end, "YYYY-MM-DD HH:mm:ss") <= moment(Date.now()) ||
+        moment(end, "YYYY-MM-DD HH:mm:ss") >=
+          moment(start, "YYYY-MM-DD HH:mm:ss")
       ) {
         const tc = datalayer.getTimecard(id);
 
         tc.start_time =
-          moment(start, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+          moment(start, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") ||
           tc.start_time ||
-          moment().format('YYYY-MM-DD HH:mm:ss');
+          moment().format("YYYY-MM-DD HH:mm:ss");
         tc.end_time =
-          moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
+          moment(end, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") ||
           tc.end_time ||
-          moment().format('YYYY-MM-DD HH:mm:ss');
+          moment().format("YYYY-MM-DD HH:mm:ss");
         datalayer.updateTimecard(tc)
           ? (result = { success: datalayer.getTimecard(id) })
           : (result = { error: `Timecard ${id} doesn't exist.` });
       } else {
         result = {
-          error: 'Invalid time provided.'
+          error: "Invalid time provided.",
         };
       }
       return result;
@@ -65,31 +65,31 @@ module.exports = {
     try {
       let result;
       if (
-        moment(start, 'YYYY-MM-DD HH:mm:ss') <= moment() ||
-        moment(end, 'YYYY-MM-DD HH:mm:ss') <= moment() ||
-        moment(end, 'YYYY-MM-DD HH:mm:ss') >=
-          moment(start, 'YYYY-MM-DD HH:mm:ss')
+        moment(start, "YYYY-MM-DD HH:mm:ss") <= moment() ||
+        moment(end, "YYYY-MM-DD HH:mm:ss") <= moment() ||
+        moment(end, "YYYY-MM-DD HH:mm:ss") >=
+          moment(start, "YYYY-MM-DD HH:mm:ss")
       ) {
         if (datalayer.getEmployee(emp)) {
           start =
-            moment(start, 'YYYY-MM-DD HH:mm:ss').format(
-              'YYYY-MM-DD HH:mm:ss'
-            ) || moment().format('YYYY-MM-DD HH:mm:ss');
+            moment(start, "YYYY-MM-DD HH:mm:ss").format(
+              "YYYY-MM-DD HH:mm:ss"
+            ) || moment().format("YYYY-MM-DD HH:mm:ss");
           end =
-            moment(end, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') ||
-            moment().format('YYYY-MM-DD HH:mm:ss');
+            moment(end, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") ||
+            moment().format("YYYY-MM-DD HH:mm:ss");
           const tc = new Timecard(start, end, emp);
           datalayer.insertTimecard(tc)
             ? (result = { success: tc })
             : (result = { error: `Timecard not created.` });
         } else {
           result = {
-            error: `Emp. ${emp} doesn't exist. A foreign key constraint fails.`
+            error: `Emp. ${emp} doesn't exist. A foreign key constraint fails.`,
           };
         }
       } else {
         result = {
-          error: 'Invalid time provided.'
+          error: "Invalid time provided.",
         };
       }
       return result;
@@ -97,7 +97,7 @@ module.exports = {
       return { error: err };
     }
   },
-  delete: id => {
+  delete: (id) => {
     try {
       let result;
       datalayer.deleteTimecard(id)
@@ -107,5 +107,5 @@ module.exports = {
     } catch (err) {
       return { error: err };
     }
-  }
+  },
 };

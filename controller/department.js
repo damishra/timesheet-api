@@ -1,8 +1,8 @@
-'use strict';
-'use esversion:6';
+"use strict";
+"use esversion:6";
 
-const datalayer = require('../companydata');
-const Department = require('../companydata').Department;
+const datalayer = require("../companydata");
+const Department = require("../companydata").Department;
 
 module.exports = {
   /**
@@ -22,7 +22,7 @@ module.exports = {
   /**
    * Get all the departments under company
    */
-  all: company => {
+  all: (company) => {
     try {
       let result;
       datalayer.getAllDepartment(company).length
@@ -66,7 +66,7 @@ module.exports = {
           ? (result = { success: datalayer.getDepartmentByNo(company, num) })
           : (result = { error: `Dept. ${id} not created in ${company}.` });
       } else {
-        result = { error: 'Department already exists.' };
+        result = { error: "Department already exists." };
       }
       return result;
     } catch (err) {
@@ -86,5 +86,5 @@ module.exports = {
     } catch (err) {
       return { error: err };
     }
-  }
+  },
 };
